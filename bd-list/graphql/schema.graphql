@@ -1,0 +1,40 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+    "List multiple tasks."
+    tasks: [Task!]! @all
+
+    "Find a single task by an identifying attribute."
+    task(id: ID!): Task @find
+}
+
+"A task that can be assigned to a user or group."
+type Task {
+    "Unique primary key."
+    id: ID!
+
+    "Title or name of the task."
+    name: String!
+
+    "Detailed description of the task."
+    description: String
+
+    "When the task was created."
+    created_at: DateTime!
+
+    "When the task was last updated."
+    updated_at: DateTime!
+}
+
+extend type Mutation {
+    "Create a new task."
+    createTask(name: String!, description: String): Task @create
+
+    "Update an existing task."
+    updateTask(id: ID!, name: String, description: String): Task @update
+
+    "Delete an existing task."
+    deleteTask(id: ID!): Task @delete
+}
