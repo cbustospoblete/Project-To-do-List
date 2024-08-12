@@ -1,40 +1,28 @@
-"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
-scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
-
-"Indicates what fields are available at the top level of a query operation."
-type Query {
-    "List multiple tasks."
-    tasks: [Task!]! @all
-
-    "Find a single task by an identifying attribute."
-    task(id: ID!): Task @find
-}
-
-"A task that can be assigned to a user or group."
+# Representa una tarea que puede asignarse a un usuario o grupo.
 type Task {
-    "Unique primary key."
     id: ID!
-
-    "Title or name of the task."
     name: String!
-
-    "Detailed description of the task."
     description: String
-
-    "When the task was created."
     created_at: DateTime!
-
-    "When the task was last updated."
     updated_at: DateTime!
 }
 
-extend type Mutation {
-    "Create a new task."
-    createTask(name: String!, description: String): Task @create
+# Define los campos disponibles para operaciones de consulta.
+type Query {
+    # Devuelve una lista de tareas.
+    tasks: [Task!]! @all
 
-    "Update an existing task."
+    # Devuelve una tarea específica identificada por su id.
+    task(id: ID! @eq): Task @find
+}
+
+type Mutation {
+    # Crea una nueva tarea.
+    createTask(name: String!, description: String!): Task @create
+
+    # Actualiza una tarea existente.
     updateTask(id: ID!, name: String, description: String): Task @update
 
-    "Delete an existing task."
+    # Elimina una tarea.
     deleteTask(id: ID!): Task @delete
 }
